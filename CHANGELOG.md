@@ -1,3 +1,31 @@
+### 1.1.16
+- Saved state which is not instance of `GifViewSavedState` allowed by all the Gif*Views - [#303](https://github.com/koral--/android-gif-drawable/issues/303)
+- `GifOptions` added introducing subsampling and opacity controlling in `GifDrawable`, `GifTexImage2D` and `GifDecoder`
+- Fixed segmentation fault when decoding oversized frames - [#290](https://github.com/koral--/android-gif-drawable/pull/290)
+- Native window redraw narrowed to dirty region only - [#287](https://github.com/koral--/android-gif-drawable/issues/287#issuecomment-215517405)  
+- `View#invalidate()` support added to `MultiCallback` - [#260](https://github.com/koral--/android-gif-drawable/issues/260#issuecomment-201949696)
+- `glTexSubImage2D()` support added to `GifTexImage2D` - [#288](https://github.com/koral--/android-gif-drawable/pull/288)
+- Support library dependency version updated to 23.4.0
+- Build tools version updated to 23.0.3
+- Android gradle plugin updated to 2.1.0
+- Gradle wrapper version updated to 2.13
+
+### 1.1.15
+- Fixed possible infinite surface binding
+- Added beta OpenGL support - `GifTexImage2D`
+- Added ability to specify a custom transformation to apply to the current Bitmap - [#259](https://github.com/koral--/android-gif-drawable/pull/259)
+- Gradle wrapper version updated to 2.12
+- Support library dependency version updated to 23.2.1
+- remainder accounting in `GifDrawable#getCurrentPosition()` fixed
+
+### 1.1.14
+- Gradle wrapper version updated to 2.11
+- Duplicated frame offset correction removed
+- Subsampling added - [#239](https://github.com/koral--/android-gif-drawable/issues/239)
+- Width, height and number of frames storage in recycled objects removed
+- Native code cleanup
+- Support library dependency version updated to 23.2.0
+
 ### 1.1.13
 - Fixed regression (heap corruption if frame size is lower than canvas size) - [#250](https://github.com/koral--/android-gif-drawable/issues/250)
 

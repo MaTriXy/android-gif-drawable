@@ -12,7 +12,7 @@ android-gif-drawable
 ## Overview
 Bundled GIFLib via JNI is used to render frames. This way should be more efficient than `WebView` or `Movie` classes.
 
-### [Javadoc](http://koral--.github.io/android-gif-drawable/javadoc/)
+### [Javadoc](http://www.javadoc.io/doc/pl.droidsonroids.gif/android-gif-drawable)
 
 ### Setup
 
@@ -20,7 +20,7 @@ Bundled GIFLib via JNI is used to render frames. This way should be more efficie
 Insert the following dependency to `build.gradle` file of your project.
 ```groovy
 dependencies {
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.16'
 }
 ```
 Note that Maven central repository should be defined eg. in top-level `build.gradle` like this:
@@ -36,7 +36,17 @@ allprojects {
     }
 }
 ```
-
+#### Gradle, snapshot repository
+Current development builds (build from `dev` branch) are published to OSS snapshot repository. To use them, sepecify repository URL in `repositories` block:
+```groovy
+repositories {
+	mavenCentral()
+	maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+dependencies {
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+}
+```
 #### Maven dependency
 
 ```xml
@@ -158,15 +168,15 @@ Standard controls for a MediaPlayer (like in [VideoView](http://developer.androi
 Just set `GifDrawable` as MediaPlayer on your [MediaController](http://developer.android.com/reference/android/widget/MediaController.html) like this:
 ```java
 	@Override
-	protected void onCreate ( Bundle savedInstanceState )
+	protected void onCreate (Bundle savedInstanceState)
 	{
-		super.onCreate( savedInstanceState );
-		GifImageButton gib = new GifImageButton( this );
-		setContentView( gib );
-		gib.setImageResource( R.drawable.sample );
-		final MediaController mc = new MediaController( this );
-		mc.setMediaPlayer( ( GifDrawable ) gib.getDrawable() );
-		mc.setAnchorView( gib );
+		super.onCreate(savedInstanceState);
+		GifImageButton gib = new GifImageButton( this);
+		setContentView(gib);
+		gib.setImageResource(R.drawable.sample);
+		final MediaController mc = new MediaController(this);
+		mc.setMediaPlayer((GifDrawable)gib.getDrawable());
+		mc.setAnchorView(gib);
 		gib.setOnClickListener( new OnClickListener()
 		{
 			@Override
@@ -210,6 +220,11 @@ To solve that create `MultiCallback` instance, add `View`s to it and set callbac
 + `isRecycled()` - checks whether drawable is recycled
 + `getError()` - returns last error details
 
+##Upgrading from 1.1.13
+Handling of several edge cases has been changed:
++ `GifDrawable#getNumberOfFrames()` now returns 0 when `GifDrawable` is recycled
++ Information included in result of `GifDrawable#toString()` when `GifDrawable` is recycled now contains zeroes only
+
 ##Upgrading from 1.1.10
 It is recommended (but not required) to call `LibraryLoader.initialize()` before using `GifDrawable`. `Context` is needed in some cases
 when native libraries cannot be extracted normally. See [ReLinker](https://medium.com/keepsafe-engineering/the-perils-of-loading-native-libraries-on-android-befa49dce2db)
@@ -247,7 +262,14 @@ even if drawable is not drawn. However rendering is not running if drawable is n
 That method can be used to control drawable visibility in cases when it is not already handled by Android framework.
 
 ##References
-This library uses code from [GIFLib](http://giflib.sourceforge.net/) 5.1.2 and [SKIA](https://code.google.com/p/skia/).
+This library uses code from [GIFLib](http://giflib.sourceforge.net/) 5.1.3 and [SKIA](https://code.google.com/p/skia/).
+
+###Projects using android-gif-drawable
+[ImageFactory](https://github.com/Doctoror/ImageFactory)
+
+[NativeScript Plugin by Brad Martin](https://github.com/bradmartin/nativescript-gif) available on [NPM](https://www.npmjs.com/package/nativescript-gif)
+
+Want to include your project here? [Fill an issue](https://github.com/koral--/android-gif-drawable/issues/new)
 
 ##License
 
