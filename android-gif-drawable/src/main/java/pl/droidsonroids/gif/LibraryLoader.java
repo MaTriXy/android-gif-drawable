@@ -2,9 +2,10 @@ package pl.droidsonroids.gif;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import java.lang.reflect.Method;
+
+import androidx.annotation.NonNull;
 
 /**
  * Helper used to work around native libraries loading on some systems.
@@ -32,6 +33,7 @@ public class LibraryLoader {
 	private static Context getContext() {
 		if (sAppContext == null) {
 			try {
+				@SuppressLint("PrivateApi")
 				final Class<?> activityThread = Class.forName("android.app.ActivityThread");
 				final Method currentApplicationMethod = activityThread.getDeclaredMethod("currentApplication");
 				sAppContext = (Context) currentApplicationMethod.invoke(null);
