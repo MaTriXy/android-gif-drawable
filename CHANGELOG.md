@@ -1,3 +1,20 @@
+### 1.2.19
+- Fix out of bounds read/write in gif decoding - [#697](https://github.com/koral--/android-gif-drawable/issue/697)
+
+### 1.2.18
+- Add AndroidX annotations warnings supperssion - [#671](https://github.com/koral--/android-gif-drawable/issue/671)
+- Use relocated ReLinker - [#665](https://github.com/koral--/android-gif-drawable/issues/665)
+- Fix double free on 0-sized images - [#673](https://github.com/koral--/android-gif-drawable/pull/673)
+- Fix heap corruption caused by malformed images - [#678](https://github.com/koral--/android-gif-drawable/pull/678)
+- Do not give up when image contains unknown record type - [#667](https://github.com/koral--/android-gif-drawable/issues/667)
+- Gradle wrapper regenerated with 5.6.2
+- Android Gradle plugin updated to 3.5.0
+
+### 1.2.17
+- Built-in ReLinker part replaced with complete ReLinker 1.3.1 - [#636](https://github.com/koral--/android-gif-drawable/issue/636)
+- Android Gradle plugin updated to 3.4.1
+- Gradle wrapper regenerated with 5.4.1
+
 ### 1.2.16
 - Fixed setting color drawable from Java code - [#606](https://github.com/koral--/android-gif-drawable/issue/606)
 - Fixed extraneous file descriptor closing - [#600](https://github.com/koral--/android-gif-drawable/issue/600)

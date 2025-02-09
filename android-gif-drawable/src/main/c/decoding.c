@@ -22,7 +22,7 @@ void DDGifSlurp(GifInfo *info, bool decode, bool exitAfterFrame) {
 	gifFilePtr = info->gifFilePtr;
 	uint_fast32_t lastAllocatedGCBIndex = 0;
 	do {
-		if (DGifGetRecordType(gifFilePtr, &RecordType) == GIF_ERROR) {
+		if (DGifGetRecordType(gifFilePtr, &RecordType) == GIF_ERROR && gifFilePtr->Error != D_GIF_ERR_WRONG_RECORD) {
 			break;
 		}
 		bool isInitialPass = !decode && !exitAfterFrame;
@@ -30,35 +30,30 @@ void DDGifSlurp(GifInfo *info, bool decode, bool exitAfterFrame) {
 			case IMAGE_DESC_RECORD_TYPE:
 
 				if (DGifGetImageDesc(gifFilePtr, isInitialPass) == GIF_ERROR) {
+					if (info->rasterBits != NULL) {
+						free(info->rasterBits);
+						info->rasterBits = NULL;
+					}
+					info->rasterSize = 0;
 					break;
 				}
 
 				if (isInitialPass) {
-					int_fast32_t widthOverflow = gifFilePtr->Image.Width - gifFilePtr->SWidth;
-					int_fast32_t heightOverflow = gifFilePtr->Image.Height - gifFilePtr->SHeight;
-					if (widthOverflow > 0 || heightOverflow > 0) {
-						gifFilePtr->SWidth += widthOverflow;
-						gifFilePtr->SHeight += heightOverflow;
-					}
-					SavedImage *sp = &gifFilePtr->SavedImages[gifFilePtr->ImageCount - 1];
-					int_fast32_t topOverflow = gifFilePtr->Image.Top + gifFilePtr->Image.Height - gifFilePtr->SHeight;
-					if (topOverflow > 0) {
-						sp->ImageDesc.Top -= topOverflow;
-					}
-
-					int_fast32_t leftOverflow = gifFilePtr->Image.Left + gifFilePtr->Image.Width - gifFilePtr->SWidth;
-					if (leftOverflow > 0) {
-						sp->ImageDesc.Left -= leftOverflow;
-					}
 					if (!updateGCB(info, &lastAllocatedGCBIndex)) {
 						break;
 					}
 				}
 
 				if (decode) {
-					int_fast32_t widthOverflow = gifFilePtr->Image.Width - info->originalWidth;
-					int_fast32_t heightOverflow = gifFilePtr->Image.Height - info->originalHeight;
 					const uint_fast32_t newRasterSize = gifFilePtr->Image.Width * gifFilePtr->Image.Height;
+					if (newRasterSize == 0) {
+						free(info->rasterBits);
+						info->rasterBits = NULL;
+						info->rasterSize = newRasterSize;
+						return;
+					}
+					const int_fast32_t widthOverflow = gifFilePtr->Image.Width - info->originalWidth;
+					const int_fast32_t heightOverflow = gifFilePtr->Image.Height - info->originalHeight;
 					if (newRasterSize > info->rasterSize || widthOverflow > 0 || heightOverflow > 0) {
 						void *tmpRasterBits = reallocarray(info->rasterBits, newRasterSize, sizeof(GifPixelType));
 						if (tmpRasterBits == NULL) {
@@ -141,7 +136,7 @@ void DDGifSlurp(GifInfo *info, bool decode, bool exitAfterFrame) {
 			case TERMINATE_RECORD_TYPE:
 				break;
 
-			default: /* Should be trapped by DGifGetRecordType */
+			default:
 				break;
 		}
 	} while (RecordType != TERMINATE_RECORD_TYPE);

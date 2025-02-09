@@ -23,6 +23,14 @@ import android.os.Build;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.widget.MediaController.MediaPlayerControl;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.FloatRange;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -34,12 +42,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.FloatRange;
-import androidx.annotation.IntRange;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import pl.droidsonroids.gif.transforms.CornerRadiusTransform;
 import pl.droidsonroids.gif.transforms.Transform;
 
@@ -537,6 +539,23 @@ public class GifDrawable extends Drawable implements Animatable, MediaPlayerCont
 	}
 
 	/**
+	 * Like {@link #seekTo(int)} but performs operation synchronously on current thread
+	 *
+	 * @param position position to seek to in milliseconds
+	 * @throws IllegalArgumentException if <code>position</code>&lt;0
+	 */
+	public void seekToBlocking(@IntRange(from = 0, to = Integer.MAX_VALUE) final int position) {
+		if (position < 0) {
+			throw new IllegalArgumentException("Position is not positive");
+		}
+
+		synchronized (mNativeInfoHandle) {
+			mNativeInfoHandle.seekToTime(position, mBuffer);
+		}
+		mInvalidationHandler.sendEmptyMessageAtTime(MSG_TYPE_INVALIDATION, 0);
+	}
+
+	/**
 	 * Like {@link #seekTo(int)} but uses index of the frame instead of time.
 	 * If <code>frameIndex</code> exceeds number of frames, seek stops at the end, no exception is thrown.
 	 *
@@ -863,7 +882,7 @@ public class GifDrawable extends Drawable implements Animatable, MediaPlayerCont
 	}
 
 	@Override
-	public void setTintMode(@NonNull PorterDuff.Mode tintMode) {
+	public void setTintMode(@Nullable PorterDuff.Mode tintMode) {
 		mTintMode = tintMode;
 		mTintFilter = updateTintFilter(mTint, tintMode);
 		invalidateSelf();

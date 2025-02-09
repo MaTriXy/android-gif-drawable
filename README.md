@@ -1,4 +1,4 @@
-android-gif-drawable
+![horizontal.png](https://cdn.steemitimages.com/DQmacEdVnEf1f2GDZ4uga1evN3FzujdR4zbkqmiV7NscPBs/horizontal.png)
 ====================
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/pl.droidsonroids.gif/android-gif-drawable/badge.svg)](https://maven-badges.herokuapp.com/maven-central/pl.droidsonroids.gif/android-gif-drawable)
 [![Build Status](https://app.bitrise.io/app/78fd40a5596e97e7/status.svg?token=SMUtlPklcIRBODd513ZdiQ)](https://app.bitrise.io/app/78fd40a5596e97e7)
@@ -21,7 +21,7 @@ Bundled GIFLib via JNI is used to render frames. This way should be more efficie
 Insert the following dependency to `build.gradle` file of your project.
 ```groovy
 dependencies {
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
 }
 ```
 Note that Maven central repository should be defined eg. in top-level `build.gradle` like this:
